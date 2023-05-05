@@ -1,0 +1,370 @@
+[
+  {
+    "key": "NumET",
+    "x-originalName": "NumET",
+    "type": "integer",
+    "label": "Numéro FINESS ET",
+    "title": "Numéro FINESS ET",
+    "description": "Un numéro d'identification unique et définitif, appelé numéro FINESS, est attribué à chaque personne morale et ses établissements inscrits au fichier FINESS."
+  },
+  {
+    "key": "NumEJ",
+    "x-originalName": "NumEJ",
+    "type": "integer",
+    "label": "Numéro FINESS EJ",
+    "title": "Numéro FINESS EJ",
+    "description": "Le numéro FINESS juridique, qui porte l'immatriculation des entités juridiques (EJ) régissant les établissements sanitaires, sociaux, médico-sociaux, correspond à la notion de personnalité morale et est associé au SIREN de l'entreprise au moment de son enrengistrement."
+  },  
+  {
+    "key": "Rs",
+    "x-originalName": "Rs",
+    "type": "string",
+    "x-capabilities": {
+      "textAgg": false
+    },
+    "label": "Raison sociale",
+    "title": "Raison sociale",
+    "description": "La raison sociale correspond au nom donné à une société"
+  },
+  {
+    "key": "Rsl",
+    "x-originalName": "Rsl",
+    "type": "string",
+    "x-capabilities": {
+      "textAgg": false
+    },
+    "label": "Raison sociale longue",
+    "title": "Raison sociale longue",
+    "description": "La raison sociale non abrégée"
+  },
+  {
+    "key": "crs",
+    "x-originalName": "crs",
+    "type": "string",
+    "x-capabilities": {
+      "textAgg": false
+    },
+    "label": "Complément de raison sociale",
+    "title": "Complément de raison sociale",
+    "description": "le complément de raison sociale est un élément qui vient compléter la dénomination sociale d'une société "
+  },
+  {
+    "key": "cd",
+    "x-originalName": "cd",
+    "type": "string",
+    "x-capabilities": {
+      "textAgg": false
+    },
+    "label": "Complément de distribution",
+    "title": "Complément de distribution",
+    "description": "adresse complémentaire qui peut être associée à un établissement de santé ou médico-social."
+  },
+  {
+    "key": "nvoie",
+    "x-originalName": "nvoie",
+    "type": "integer",
+    "label": "Numéro de voie",
+    "title": "Numéro de voie",
+    "description": "Numéro de voie"
+  },
+  {
+    "key": "tvoie",
+    "x-originalName": "tvoie",
+    "type": "string",
+    "x-capabilities": {
+      "textAgg": false
+    },
+    "label": "Type de voie",
+    "title": "Type de voie",
+    "description": "Type de voie"
+  },
+  {
+    "key": "lvoie",
+    "x-originalName": "lvoie",
+    "type": "string",
+    "x-capabilities": {
+      "textAgg": false
+    },
+    "label": "Libellé de voie",
+    "title": "Libellé de voie",
+    "description": "Libellé de voie"
+  },
+  {
+    "key": "cvoie",
+    "x-originalName": "cvoie",
+    "type": "string",
+    "x-capabilities": {
+      "textAgg": false
+    },
+    "label": "Complement de voie",
+    "title": "Complement de voie",
+    "description": "Complement de voie"
+  },
+  {
+    "key": "ld",
+    "x-originalName": "ld",
+    "type": "string",
+    "x-capabilities": {
+      "textAgg": false
+    },
+    "label": "Lieu-dit / BP",
+    "title": "Lieu-dit / BP",
+    "description": ""
+  },
+  {
+    "key": "codeCom",
+    "x-originalName": "codeCom",
+    "type": "string",
+    "label": "Code commune",
+    "title": "Code commune",
+    "description": "",
+    "x-refersTo": "http://rdf.insee.fr/def/geo#codeCommune"
+  },
+  {
+    "key": "dep",
+    "x-originalName": "dep",
+    "type": "string",
+    "label": "Département",
+    "title": "Département",
+    "description": "",
+    "x-refersTo": "http://rdf.insee.fr/def/geo#codeDepartement"
+  },
+  {
+    "key": "lddep",
+    "x-originalName": "lddep",
+    "type": "string",
+    "x-capabilities": {
+      "textAgg": false
+    },
+    "label": "Libellé département",
+    "title": "Libellé département",
+    "description": ""
+  },
+  {
+    "key": "lach",
+    "x-originalName": "lach",
+    "type": "string",
+    "x-capabilities": {
+      "textAgg": false
+    },
+    "label": "Ligne d'acheminement (Code postal + Lib Commune)",
+    "title": "Ligne d'acheminement (Code postal + Lib Commune)",
+    "description": ""
+  },
+  {
+    "key": "tel",
+    "x-originalName": "tel",
+    "type": "integer",
+    "x-capabilities": {
+      "textAgg": false
+    },
+    "label": "Téléphone",
+    "title": "Téléphone",
+    "description": ""
+  },
+  {
+    "key": "telc",
+    "x-originalName": "telc",
+    "type": "integer",
+    "x-capabilities": {
+      "textAgg": false
+    },
+    "label": "Télécopie",
+    "title": "Télécopie",
+    "description": ""
+  },
+  {
+    "key": "catet",
+    "x-originalName": "catet",
+    "type": "integer",
+    "x-capabilities": {
+      "textAgg": false
+    },
+    "label": "Catégorie d'établissement",
+    "title": "Catégorie d'établissement",
+    "description": ""
+  },
+  {
+    "key": "lcatet",
+    "x-originalName": "lcatet",
+    "type": "string",
+    "x-capabilities": {
+      "textAgg": false
+    },
+    "label": "Libellé catégorie d'établissement",
+    "title": "Libellé catégorie d'établissement",
+    "description": ""
+  },
+  {
+    "key": "catag",
+    "x-originalName": "catag",
+    "type": "integer",
+    "label": "Catégorie d'agrégat d'établissement",
+    "title": "Catégorie d'agrégat d'établissement",
+    "description": ""
+  },
+  {
+    "key": "lcatag",
+    "x-originalName": "lcatag",
+    "type": "string",
+    "x-capabilities": {
+      "textAgg": false
+    },
+    "label": "Libellé catégorie d'agégat d'établissement",
+    "title": "Libellé catégorie d'agégat d'établissement",
+    "description": ""
+  },
+  {
+    "key": "nsiret",
+    "x-originalName": "nsiret",
+    "type": "string",
+    "x-capabilities": {
+      "textAgg": false
+    },
+    "label": "Numéro de SIRET",
+    "title": "Numéro de SIRET",
+    "description": "",
+    "x-refersTo": "http://www.datatourisme.fr/ontology/core/1.0/#siret"
+  },
+  {
+    "key": "ape",
+    "x-originalName": "ape",
+    "type": "string",
+    "x-capabilities": {
+      "textAgg": false
+    },
+    "label": "Code APE",
+    "title": "Code APE",
+    "description": ""
+  },
+  {
+    "key": "mft",
+    "x-originalName": "mft",
+    "type": "integer",
+    "x-capabilities": {
+      "textAgg": false
+    },
+    "label": "Code MFT",
+    "title": "Code MFT",
+    "description": ""
+  },
+  {
+    "key": "lmft",
+    "x-originalName": "lmft",
+    "type": "string",
+    "x-capabilities": {
+      "textAgg": false
+    },
+    "label": "Libellé MFT",
+    "title": "Libellé MFT",
+    "description": ""
+  },
+  {
+    "key": "sph",
+    "x-originalName": "sph",
+    "type": "integer",
+    "x-capabilities": {
+      "textAgg": false
+    },
+    "label": "Code SPH",
+    "title": "Code SPH",
+    "description": ""
+  },
+  {
+    "key": "lsph",
+    "x-originalName": "lsph",
+    "type": "string",
+    "x-capabilities": {
+      "textAgg": false
+    },
+    "label": "Libellé SPH",
+    "title": "Libellé SPH",
+    "description": ""
+  },
+  {
+    "key": "douverture",
+    "x-originalName": "douverture",
+    "type": "string",
+    "x-capabilities": {
+      "textAgg": false
+    },
+    "label": "Date d'ouverture",
+    "title": "Date d'ouverture",
+    "format": "date",
+    "description": ""
+  },
+  {
+    "key": "dautorisation",
+    "x-originalName": "dautorisation",
+    "type": "string",
+    "x-capabilities": {
+      "textAgg": false
+    },
+    "label": "Date d'autorisation",
+    "title": "Date d'autorisation",
+    "format": "date",
+    "description": ""
+  },
+  {
+    "key": "dms",
+    "x-originalName": "dms",
+    "type": "string",
+    "x-capabilities": {
+      "textAgg": false
+    },
+    "label": "Date de mise à jour sur la structre",
+    "title": "Date de mise à jour sur la structre",
+    "format": "date",
+    "description": ""
+  },
+  {
+    "key": "uai",
+    "x-originalName": "uai",
+    "type": "string",
+    "x-capabilities": {
+      "textAgg": false
+    },
+    "label": "Code UAI (RNE)",
+    "title": "Code UAI (RNE)",
+    "description": ""
+  },
+  {
+    "key": "lat",
+    "x-originalName": "lat",
+    "type": "number",
+    "label": "Latitude",
+    "title": "Latitude",
+    "description": "",
+    "x-refersTo": "http://schema.org/latitude"
+  },
+  {
+    "key": "lon",
+    "x-originalName": "lon",
+    "type": "number",
+    "label": "Longitude",
+    "title": "Longitude",
+    "description": "",
+    "x-refersTo": "http://schema.org/longitude"
+  },
+  {
+    "key": "src",
+    "x-originalName": "src",
+    "type": "string",
+    "x-capabilities": {
+      "textAgg": false
+    },
+    "label": "Source des coordonnées",
+    "title": "Source des coordonnées",
+    "description": ""
+  },
+  {
+    "key": "dmaj",
+    "x-originalName": "dmaj",
+    "type": "string",
+    "format": "date",
+    "label": "Date de mise à jour des coordonnées",
+    "title": "Date de mise à jour des coordonnées",
+    "description": ""
+  }
+  
+]
