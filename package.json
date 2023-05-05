@@ -1,0 +1,44 @@
+{
+  "name": "@data-fair/processing-finess",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib",
+    "test": "test"
+  },
+  "scripts": {
+    "test": "mocha ./test/test.js",
+    "lint": "eslint --ignore-path .gitignore .",
+    "lint-fix": "eslint --ignore-path .gitignore --fix ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/data-fair/processing-finess.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/data-fair/processing-finess/issues"
+  },
+  "homepage": "https://github.com/data-fair/processing-finess#readme",
+  "devDependencies": {
+    "@data-fair/processings-test-utils": "^0.5.2",
+    "config": "^3.3.9",
+    "eslint": "^8.39.0",
+    "standard": "^17.0.0"
+  },
+  "dependencies": {
+    "byline": "^5.0.0",
+    "csv-parser": "^3.0.0",
+    "form-data": "^4.0.0",
+    "fs-extra": "^11.1.1",
+    "iconv-lite": "^0.6.3",
+    "json-2-csv": "^4.0.0",
+    "path": "^0.12.7",
+    "proj4": "^2.9.0",
+    "pump": "^3.0.0",
+    "stream": "^0.0.2",
+    "util": "^0.12.5"
+  }
+}
