@@ -16,6 +16,9 @@
     "type": "git",
     "url": "git+https://github.com/data-fair/processing-finess.git"
   },
+  "keywords": [
+    "data-fair-processings-plugin"
+  ],
   "author": "",
   "license": "MIT",
   "bugs": {
