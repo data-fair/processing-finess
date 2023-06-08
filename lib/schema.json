@@ -154,32 +154,33 @@
   {
     "key": "tel",
     "x-originalName": "tel",
-    "type": "integer",
+    "type": "string",
     "x-capabilities": {
       "textAgg": false
     },
     "label": "Téléphone",
     "title": "Téléphone",
-    "description": ""
+    "description": "","x-refersTo": "https://www.w3.org/2006/vcard/ns#tel",
+    "x-concept": {
+      "id": "tel",
+      "title": "N° de téléphone",
+      "primary": true
+    }
   },
   {
     "key": "telc",
     "x-originalName": "telc",
-    "type": "integer",
-    "x-capabilities": {
-      "textAgg": false
-    },
+    "type": "string",
     "label": "Télécopie",
     "title": "Télécopie",
-    "description": ""
+    "description": "",
+    "ignoreDetection": true
   },
   {
     "key": "catet",
     "x-originalName": "catet",
     "type": "integer",
-    "x-capabilities": {
-      "textAgg": false
-    },
+    
     "label": "Catégorie d'établissement",
     "title": "Catégorie d'établissement",
     "description": ""
