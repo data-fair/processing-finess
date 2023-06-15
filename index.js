@@ -34,7 +34,7 @@ exports.run = async ({ pluginConfig, processingConfig, tmpDir, axios, log, patch
       data: formData,
       maxContentLength: Infinity,
       maxBodyLength: Infinity,
-      headers: { ...formData.getHeaders(), contentLength }
+      headers: { ...formData.getHeaders(), 'content-length': contentLength }
     })).data
 
     if (processingConfig.datasetMode === 'update') {

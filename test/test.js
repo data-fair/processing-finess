@@ -10,9 +10,9 @@ describe('global test', function () {
       pluginConfig: {
       },
       processingConfig: {
-        url: 'https://static.data.gouv.fr/resources/finess-extraction-du-fichier-des-etablissements/20230503-154418/etalab-cs1100507-stock-20230502-0337.csv',
-        datasetMode: 'update',
-        dataset: { id: 'finess-test1', title: 'finess test 1' }
+        url: 'https://www.data.gouv.fr/fr/datasets/r/98f3161f-79ff-4f16-8f6a-6d571a80fea2',
+        datasetMode: 'create',
+        dataset: { id: 'finess-test', title: 'finess test' }
       },
       tmpDir: 'data'
     }, config, false)
