@@ -1,12 +1,13 @@
 process.env.NODE_ENV = 'test'
 const config = require('config')
-const testUtils = require('@data-fair/processings-test-utils')
 const processFiness = require('../')
 
 describe('global test', function () {
   it('should load data on the staging', async function () {
     this.timeout(100000)
-    const context = testUtils.context({
+
+    const testsUtils = await import('@data-fair/lib/processings/tests-utils.js')
+    const context = testsUtils.context({
       pluginConfig: {
       },
       processingConfig: {
