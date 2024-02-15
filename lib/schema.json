@@ -1,6 +1,6 @@
 [
   {
-    "key": "NumET",
+    "key": "numet",
     "x-originalName": "NumET",
     "type": "integer",
     "label": "Numéro FINESS ET",
@@ -8,7 +8,7 @@
     "description": "Un numéro d'identification unique et définitif, appelé numéro FINESS, est attribué à chaque personne morale et ses établissements inscrits au fichier FINESS."
   },
   {
-    "key": "NumEJ",
+    "key": "numej",
     "x-originalName": "NumEJ",
     "type": "integer",
     "label": "Numéro FINESS EJ",
@@ -16,7 +16,7 @@
     "description": "Le numéro FINESS juridique, qui porte l'immatriculation des entités juridiques (EJ) régissant les établissements sanitaires, sociaux, médico-sociaux, correspond à la notion de personnalité morale et est associé au SIREN de l'entreprise au moment de son enrengistrement."
   },  
   {
-    "key": "Rs",
+    "key": "rs",
     "x-originalName": "Rs",
     "type": "string",
     "x-capabilities": {
@@ -24,10 +24,11 @@
     },
     "label": "Raison sociale",
     "title": "Raison sociale",
-    "description": "La raison sociale correspond au nom donné à une société"
+    "description": "La raison sociale correspond au nom donné à une société",
+    "x-refersTo": "http://www.w3.org/2000/01/rdf-schema#label"
   },
   {
-    "key": "Rsl",
+    "key": "rsl",
     "x-originalName": "Rsl",
     "type": "string",
     "x-capabilities": {
@@ -112,7 +113,7 @@
     "description": ""
   },
   {
-    "key": "codeCom",
+    "key": "codecom",
     "x-originalName": "codeCom",
     "type": "string",
     "label": "Code commune",
