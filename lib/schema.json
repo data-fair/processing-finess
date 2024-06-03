@@ -14,7 +14,7 @@
     "label": "Numéro FINESS EJ",
     "title": "Numéro FINESS EJ",
     "description": "Le numéro FINESS juridique, qui porte l'immatriculation des entités juridiques (EJ) régissant les établissements sanitaires, sociaux, médico-sociaux, correspond à la notion de personnalité morale et est associé au SIREN de l'entreprise au moment de son enrengistrement."
-  },  
+  },
   {
     "key": "rs",
     "x-originalName": "Rs",
@@ -113,7 +113,7 @@
     "description": ""
   },
   {
-    "key": "codecom",
+    "key": "codeCom",
     "x-originalName": "codeCom",
     "type": "string",
     "label": "Code commune",
@@ -161,7 +161,8 @@
     },
     "label": "Téléphone",
     "title": "Téléphone",
-    "description": "","x-refersTo": "https://www.w3.org/2006/vcard/ns#tel",
+    "description": "",
+    "x-refersTo": "https://www.w3.org/2006/vcard/ns#tel",
     "x-concept": {
       "id": "tel",
       "title": "N° de téléphone",
@@ -181,7 +182,7 @@
     "key": "catet",
     "x-originalName": "catet",
     "type": "integer",
-    
+
     "label": "Catégorie d'établissement",
     "title": "Catégorie d'établissement",
     "description": ""
@@ -368,5 +369,4 @@
     "title": "Date de mise à jour des coordonnées",
     "description": ""
   }
-  
 ]
