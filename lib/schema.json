@@ -1,6 +1,6 @@
 [
   {
-    "key": "numet",
+    "key": "NumET",
     "x-originalName": "NumET",
     "type": "integer",
     "label": "Numéro FINESS ET",
@@ -8,7 +8,7 @@
     "description": "Un numéro d'identification unique et définitif, appelé numéro FINESS, est attribué à chaque personne morale et ses établissements inscrits au fichier FINESS."
   },
   {
-    "key": "numej",
+    "key": "NumEJ",
     "x-originalName": "NumEJ",
     "type": "integer",
     "label": "Numéro FINESS EJ",
@@ -16,7 +16,7 @@
     "description": "Le numéro FINESS juridique, qui porte l'immatriculation des entités juridiques (EJ) régissant les établissements sanitaires, sociaux, médico-sociaux, correspond à la notion de personnalité morale et est associé au SIREN de l'entreprise au moment de son enrengistrement."
   },
   {
-    "key": "rs",
+    "key": "Rs",
     "x-originalName": "Rs",
     "type": "string",
     "x-capabilities": {
@@ -28,7 +28,7 @@
     "x-refersTo": "http://www.w3.org/2000/01/rdf-schema#label"
   },
   {
-    "key": "rsl",
+    "key": "Rsl",
     "x-originalName": "Rsl",
     "type": "string",
     "x-capabilities": {
