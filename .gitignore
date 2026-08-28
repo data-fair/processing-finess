@@ -1,4 +1,5 @@
 node_modules/
+.type/
 data/
 /config/local-*
 errors.log

@@ -1,49 +1,60 @@
 {
-    "type": "object",
-    "x-display": "tabs",
-    "required": ["datasetMode"],
-    "allOf": [{
+  "type": "object",
+  "layout": "tabs",
+  "required": ["datasetMode", "url"],
+  "allOf": [
+    {
       "title": "Jeu de données",
-      "oneOf": [{
-        "title": "Créer un jeu de données",
-        "required": ["dataset"],
-        "properties": {
-          "datasetMode": { "type": "string", "const": "create", "title": "Action" },
-          "dataset": {
-            "type": "object",
-            "required": ["title"],
-            "properties": {
-              "title": {"type": "string", "title": "Titre du jeu de donnée", "default": "FINESS"}
+      "default": { "datasetMode": "update" },
+      "oneOf": [
+        {
+          "title": "Créer un jeu de données",
+          "required": ["datasetMode"],
+          "properties": {
+            "datasetMode": { "type": "string", "const": "create", "title": "Action" },
+            "datasetTitle": {
+              "type": "string",
+              "title": "Titre du jeu de données à créer",
+              "default": "FINESS",
+              "description": "Le jeu de données sera créé lors de la première exécution, puis le traitement passera automatiquement en mode mise à jour."
+            }
+          }
+        },
+        {
+          "title": "Mettre à jour un jeu de données",
+          "required": ["dataset"],
+          "properties": {
+            "datasetMode": { "type": "string", "const": "update", "title": "Action" },
+            "dataset": {
+              "type": "object",
+              "title": "Jeu de données",
+              "layout": {
+                "getItems": {
+                  "url": "${context.dataFairUrl}/api/v1/datasets?select=id,title&size=50&${context.ownerFilter}&raw=true",
+                  "qSearchParam": "q",
+                  "itemsResults": "data.results",
+                  "itemTitle": "item.title",
+                  "itemKey": "item.id"
+                }
+              },
+              "properties": {
+                "id": { "type": "string", "title": "Identifiant" },
+                "title": { "type": "string", "title": "Titre" }
+              }
             }
           }
         }
-      }, {
-        "title": "Mettre à jour un jeu de données",
-        "required": ["dataset"],
-        "properties": {
-          "datasetMode": { "type": "string", "const": "update" },
-          "dataset": {
-            "type": "object",
-            "title": "Jeu de donnée existant",
-            "x-fromUrl": "{context.dataFairUrl}/api/v1/datasets?q={q}&select=id,title&{context.ownerFilter}",
-            "x-itemsProp": "results",
-            "x-itemTitle": "title",
-            "x-itemKey": "id",
-            "properties": {
-              "id": {"type": "string", "title": "Identifiant"},
-              "href": { "type": "string", "title": "url" },
-              "title": {"type": "string", "title": "Titre"}
-            }
-          }
-        }
-      }]
-    }, {
+      ]
+    },
+    {
       "title": "Paramètres",
       "properties": {
-        "url":{
-            "type" :"string",
-            "title": "URL de la source des données"
+        "url": {
+          "type": "string",
+          "title": "URL de la source des données",
+          "description": "URL de téléchargement du fichier FINESS (ex: fichier CSV issu de data.gouv.fr)"
         }
       }
-    }]
-  }
+    }
+  ]
+}
