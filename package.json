@@ -1,6 +1,6 @@
 {
   "name": "@data-fair/processing-finess",
-  "version": "0.2.3",
+  "version": "0.3.0",
   "description": "Plugin for data-fair-processings. Extraction et géolocalisation des établissements FINESS.",
   "main": "index.ts",
   "type": "module",
