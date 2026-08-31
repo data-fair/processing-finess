@@ -99,9 +99,10 @@ export default async (dir: string, log: ProcessingContext<ProcessingConfig>['log
   if (shouldBeStopped) return
 
   const columns = schema.map((field: { key: string }) => field.key)
+  const numericFields = new Set(schema.filter((f: any) => f.type === 'integer' || f.type === 'number').map((f: any) => f.key))
   const outputFile = path.join(dir, 'etablissements_geolocalises.csv')
   const writeStream = fs.createWriteStream(outputFile)
-  const stringifier = stringify({ header: true, columns })
+  const stringifier = stringify({ header: true, columns, quoted_string: true })
   stringifier.pipe(writeStream)
 
   const structStream = readCsv(path.join(dir, 'structureet.csv'))
@@ -110,9 +111,15 @@ export default async (dir: string, log: ProcessingContext<ProcessingConfig>['log
     for await (const rawRow of structStream as AsyncIterable<Record<string, string>>) {
       if (shouldBeStopped) break
 
-      const row: Record<string, string> = {}
+      const row: Record<string, string | number> = {}
       for (const [key, value] of Object.entries(rawRow)) {
-        row[key] = normalizeQuotes(value)
+        const val = normalizeQuotes(value)
+        if (val !== '' && numericFields.has(key)) {
+          const num = Number(val)
+          row[key] = isNaN(num) ? val : num
+        } else {
+          row[key] = val
+        }
       }
 
       if (!row.NumET) continue
