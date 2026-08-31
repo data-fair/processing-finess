@@ -115,6 +115,8 @@ export default async (dir: string, log: ProcessingContext<ProcessingConfig>['log
         row[key] = normalizeQuotes(value)
       }
 
+      if (!row.NumET) continue
+
       const numET = row.NumET
       const geo = geoMap.get(numET)
 
