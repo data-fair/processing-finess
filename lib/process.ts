@@ -106,6 +106,7 @@ export default async (dir: string, log: ProcessingContext<ProcessingConfig>['log
   stringifier.pipe(writeStream)
 
   const structStream = readCsv(path.join(dir, 'structureet.csv'))
+  let ignoredLines = 0
 
   try {
     for await (const rawRow of structStream as AsyncIterable<Record<string, string>>) {
@@ -122,7 +123,10 @@ export default async (dir: string, log: ProcessingContext<ProcessingConfig>['log
         }
       }
 
-      if (!row.NumET) continue
+      if (!row.NumET) {
+        ignoredLines++
+        continue
+      }
 
       const numET = row.NumET
       const geo = geoMap.get(numET)
@@ -160,5 +164,8 @@ export default async (dir: string, log: ProcessingContext<ProcessingConfig>['log
   }
 
   if (shouldBeStopped) return
+  if (ignoredLines > 0) {
+    await log.warning(`${ignoredLines} ligne(s) du fichier source ont été ignorée(s) car l'identifiant 'NumET' était manquant.`)
+  }
   await log.info('Fichier CSV créé')
 }
