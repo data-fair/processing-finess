@@ -6,16 +6,7 @@ import type { AxiosInstance } from 'axios'
 import type { ProcessingContext } from '@data-fair/lib-common-types/processings.js'
 import type { ProcessingConfig } from '#types/processingConfig/index.ts'
 import schema from './schema.json' with { type: 'json' }
-
-export const displayBytes = (aSize: number): string => {
-  aSize = Math.abs(parseInt(String(aSize), 10))
-  if (aSize === 0) return '0 octets'
-  const def: [number, string][] = [[1, 'octets'], [1000, 'ko'], [1000 * 1000, 'Mo'], [1000 * 1000 * 1000, 'Go'], [1000 * 1000 * 1000 * 1000, 'To'], [1000 * 1000 * 1000 * 1000 * 1000, 'Po']]
-  for (let i = 0; i < def.length; i++) {
-    if (aSize < def[i][0]) return (aSize / def[i - 1][0]).toLocaleString() + ' ' + def[i - 1][1]
-  }
-  return aSize + ' octets'
-}
+import { displayBytes } from './utils.ts'
 
 export default async (
   processingConfig: ProcessingConfig,
@@ -41,7 +32,7 @@ export default async (
   formData.append('file', fs.createReadStream(filePath), { filename: path.parse(filePath).base })
 
   const contentLength = await promisify(formData.getLength).call(formData)
-  await log.info(`Chargement de (${displayBytes(contentLength)})`)
+  await log.info(`Envoi du fichier à Data Fair (${displayBytes(contentLength)})`)
 
   const dataset = (await axios({
     method: 'post',
@@ -53,9 +44,9 @@ export default async (
   })).data
 
   if (isUpdate) {
-    await log.info(`jeu de données mis à jour, id="${dataset.id}", title="${dataset.title}"`)
+    await log.info(`Jeu de données mis à jour, id="${dataset.id}", title="${dataset.title}"`)
   } else {
-    await log.info(`jeu de données créé, id="${dataset.id}", title="${dataset.title}"`)
+    await log.info(`Jeu de données créé, id="${dataset.id}", title="${dataset.title}"`)
     await patchConfig({ datasetMode: 'update', dataset: { id: dataset.id, title: dataset.title } })
   }
 }

@@ -7,6 +7,7 @@ import type { AxiosInstance } from 'axios'
 import type { ProcessingContext } from '@data-fair/lib-common-types/processings.js'
 import type { ProcessingConfig } from '#types/processingConfig/index.ts'
 import { isStopped } from './process.ts'
+import { displayBytes, startProgress } from './utils.ts'
 
 const pump = promisify(pumpCb) as (...streams: unknown[]) => Promise<void>
 
@@ -17,8 +18,10 @@ export default async (processingConfig: ProcessingConfig, dir: string = 'data', 
   const url = processingConfig.url
   if (!url) throw new Error('L\'URL de la source des données n\'est pas renseignée')
 
-  const fileName = 'finess.csv'
-  const file = path.join(dir, fileName)
+  await log.step('Téléchargement du fichier source')
+  await log.info(`Téléchargement depuis ${url}`)
+
+  const file = path.join(dir, 'finess.csv')
   await fs.ensureFile(file)
 
   let res
@@ -29,14 +32,24 @@ export default async (processingConfig: ProcessingConfig, dir: string = 'data', 
     throw err
   }
 
-  await log.info(`Récupération du fichier ${file}`)
-  await pump(res.data, fs.createWriteStream(file))
-  await log.info(`Fichier récupéré dans ${file}`)
+  // le flux source reste en pause tant que `pump` ne l'a pas branché : la progression
+  // est lue sur le fichier de destination, sans risque de perdre des chunks
+  const writeStream = fs.createWriteStream(file)
+  const contentLength = Number(res.headers?.['content-length']) || 0
+  const endDownloadProgress = await startProgress(log, 'Téléchargement', contentLength, () => writeStream.bytesWritten)
+  try {
+    await pump(res.data, writeStream)
+  } finally {
+    await endDownloadProgress()
+  }
+
+  const sourceSize = (await fs.stat(file)).size
+  await log.info(`Fichier récupéré (${displayBytes(sourceSize)})`)
 
   if (isStopped()) return
 
   await log.step('Extraction établissements et géolocalisation')
-  const fileStream = fs.createReadStream(path.join(dir, 'finess.csv'), { encoding: 'utf8' })
+  const fileStream = fs.createReadStream(file, { encoding: 'utf8' })
   const rl = readline.createInterface({
     input: fileStream,
     crlfDelay: Infinity
@@ -47,16 +60,23 @@ export default async (processingConfig: ProcessingConfig, dir: string = 'data', 
   const outGeolocalisation = fs.createWriteStream(path.join(dir, 'geolocalisation.csv'))
   outGeolocalisation.write(geolocalisationHeader.join(';') + '\n')
 
+  let structureetLines = 0
+  let geolocalisationLines = 0
+  const endExtractionProgress = await startProgress(log, 'Extraction', sourceSize, () => fileStream.bytesRead)
+
   try {
     for await (const line of rl) {
       if (isStopped()) break
       if (line.startsWith('structureet;')) {
         outStructureet.write(line.slice('structureet;'.length).replace(/""""/g, '""') + '\n')
+        structureetLines++
       } else if (line.startsWith('geolocalisation;')) {
         outGeolocalisation.write(line.slice('geolocalisation;'.length).replace(/""""/g, '""') + '\n')
+        geolocalisationLines++
       }
     }
   } finally {
+    await endExtractionProgress()
     rl.close()
     fileStream.destroy()
     await new Promise<void>((resolve, reject) => {
@@ -66,4 +86,7 @@ export default async (processingConfig: ProcessingConfig, dir: string = 'data', 
       outGeolocalisation.end((err?: Error | null) => err ? reject(err) : resolve())
     })
   }
+
+  if (isStopped()) return
+  await log.info(`${structureetLines.toLocaleString()} établissements et ${geolocalisationLines.toLocaleString()} géolocalisations extraits`)
 }

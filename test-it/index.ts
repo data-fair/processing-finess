@@ -59,15 +59,17 @@ const stubAxios = (onGet?: () => void) => Object.assign(
 let dir: string
 /** Lignes du CSV produit, indexées par numéro FINESS. */
 let rows: Record<string, Record<string, string>>
+/** Messages `log.info` émis pendant le téléchargement et la fusion. */
+const infos: string[] = []
 
 describe('traitement FINESS', () => {
   before(async () => {
     dir = await fs.mkdtemp(path.join(os.tmpdir(), 'finess-test-'))
     setShouldBeStopped(false)
     // @ts-expect-error stubs minimaux d'axios et du logger
-    await download({ url: 'https://example.org/finess.csv' }, dir, stubAxios(), stubLog())
+    await download({ url: 'https://example.org/finess.csv' }, dir, stubAxios(), stubLog((msg) => infos.push(msg)))
     // @ts-expect-error stub minimal du logger
-    await processFiles(dir, stubLog())
+    await processFiles(dir, stubLog((msg) => infos.push(msg)))
     const parsed = parse(await fs.readFile(path.join(dir, 'etablissements_geolocalises.csv')), { columns: true }) as Record<string, string>[]
     rows = Object.fromEntries(parsed.map((row) => [row.NumET, row]))
   })
@@ -142,6 +144,12 @@ describe('traitement FINESS', () => {
   it('conserve les guillemets d\'usage dans les libellés', () => {
     assert.equal(rows['010009173'].Rs, 'LABM "BIOCEA"')
     assert.equal(rows['970100012'].crs, 'ANNEXE DU "BOIS DU ROI"')
+  })
+
+  it('récapitule les compteurs dans les logs', () => {
+    assert.ok(infos.includes('3 établissements et 4 géolocalisations extraits'), `extraction non résumée : ${infos.join(' | ')}`)
+    // 010011674 n'a pas de coordonnées : 2 établissements géolocalisés sur 3
+    assert.ok(infos.includes('3 établissements écrits, dont 2 géolocalisés (67 %)'), `fusion non résumée : ${infos.join(' | ')}`)
   })
 })
 

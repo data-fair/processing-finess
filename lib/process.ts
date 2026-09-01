@@ -6,6 +6,7 @@ import proj4 from 'proj4'
 import type { ProcessingContext } from '@data-fair/lib-common-types/processings.js'
 import type { ProcessingConfig } from '#types/processingConfig/index.ts'
 import schema from './schema.json' with { type: 'json' }
+import { startProgress } from './utils.ts'
 
 // Projections from https://epsg.io/
 proj4.defs('EPSG:2154', '+proj=lcc +lat_1=49 +lat_2=44 +lat_0=46.5 +lon_0=3 +x_0=700000 +y_0=6600000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs')
@@ -41,8 +42,9 @@ const convertDep: Record<string, string> = {
  */
 const readCsv = (file: string) => {
   const parser = parse({ delimiter: ';', columns: true })
-  fs.createReadStream(file).on('error', (err) => parser.destroy(err)).pipe(parser)
-  return parser
+  const stream = fs.createReadStream(file)
+  stream.on('error', (err) => parser.destroy(err)).pipe(parser)
+  return { parser, stream }
 }
 
 /**
@@ -84,7 +86,7 @@ export default async (dir: string, log: ProcessingContext<ProcessingConfig>['log
   await log.step('Fusion établissements et géolocalisation')
 
   const geoMap = new Map<string, GeoCoordinates>()
-  const geoStream = readCsv(path.join(dir, 'geolocalisation.csv'))
+  const { parser: geoStream } = readCsv(path.join(dir, 'geolocalisation.csv'))
 
   for await (const row of geoStream as AsyncIterable<{ NumET: string, X: string, Y: string, src: string, dmaj: string }>) {
     if (shouldBeStopped) break
@@ -105,8 +107,13 @@ export default async (dir: string, log: ProcessingContext<ProcessingConfig>['log
   const stringifier = stringify({ header: true, columns, quoted_string: true })
   stringifier.pipe(writeStream)
 
-  const structStream = readCsv(path.join(dir, 'structureet.csv'))
+  const structureetFile = path.join(dir, 'structureet.csv')
+  const structureetSize = (await fs.stat(structureetFile)).size
+  const { parser: structStream, stream: structFileStream } = readCsv(structureetFile)
   let ignoredLines = 0
+  let writtenLines = 0
+  let geolocatedLines = 0
+  const endProgress = await startProgress(log, 'Fusion', structureetSize, () => structFileStream.bytesRead)
 
   try {
     for await (const rawRow of structStream as AsyncIterable<Record<string, string>>) {
@@ -139,6 +146,7 @@ export default async (dir: string, log: ProcessingContext<ProcessingConfig>['log
           const reproject = proj4(epsg, 'EPSG:4326', [xNum, yNum])
           row.lat = String(reproject[1])
           row.lon = String(reproject[0])
+          geolocatedLines++
         }
       }
 
@@ -154,8 +162,10 @@ export default async (dir: string, log: ProcessingContext<ProcessingConfig>['log
       row.telc = row.telc ? row.telc.padStart(10, '0') : ''
 
       stringifier.write(row)
+      writtenLines++
     }
   } finally {
+    await endProgress()
     stringifier.end()
     await new Promise<void>((resolve, reject) => {
       writeStream.on('finish', resolve)
@@ -165,7 +175,8 @@ export default async (dir: string, log: ProcessingContext<ProcessingConfig>['log
 
   if (shouldBeStopped) return
   if (ignoredLines > 0) {
-    await log.warning(`${ignoredLines} ligne(s) du fichier source ont été ignorée(s) car l'identifiant 'NumET' était manquant.`)
+    await log.warning(`${ignoredLines.toLocaleString()} ligne(s) du fichier source ont été ignorée(s) car l'identifiant 'NumET' était manquant.`)
   }
-  await log.info('Fichier CSV créé')
+  const geolocatedRatio = writtenLines ? Math.round((geolocatedLines / writtenLines) * 100) : 0
+  await log.info(`${writtenLines.toLocaleString()} établissements écrits, dont ${geolocatedLines.toLocaleString()} géolocalisés (${geolocatedRatio} %)`)
 }
