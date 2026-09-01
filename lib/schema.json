@@ -3,6 +3,7 @@
     "key": "NumET",
     "x-originalName": "NumET",
     "type": "string",
+    "x-transform": { "type": "string" },
     "label": "Numéro FINESS ET",
     "title": "Numéro FINESS ET",
     "description": "Un numéro d'identification unique et définitif, appelé numéro FINESS, est attribué à chaque personne morale et ses établissements inscrits au fichier FINESS."
@@ -11,6 +12,7 @@
     "key": "NumEJ",
     "x-originalName": "NumEJ",
     "type": "string",
+    "x-transform": { "type": "string" },
     "label": "Numéro FINESS EJ",
     "title": "Numéro FINESS EJ",
     "description": "Le numéro FINESS juridique, qui porte l'immatriculation des entités juridiques (EJ) régissant les établissements sanitaires, sociaux, médico-sociaux, correspond à la notion de personnalité morale et est associé au SIREN de l'entreprise au moment de son enrengistrement."
@@ -116,6 +118,7 @@
     "key": "codeCom",
     "x-originalName": "codeCom",
     "type": "string",
+    "x-transform": { "type": "string" },
     "label": "Code commune",
     "title": "Code commune",
     "description": "",
@@ -156,6 +159,7 @@
     "key": "tel",
     "x-originalName": "tel",
     "type": "string",
+    "x-transform": { "type": "string" },
     "x-capabilities": {
       "textAgg": false
     },
@@ -173,10 +177,10 @@
     "key": "telc",
     "x-originalName": "telc",
     "type": "string",
+    "x-transform": { "type": "string" },
     "label": "Télécopie",
     "title": "Télécopie",
-    "description": "",
-    "ignoreDetection": true
+    "description": ""
   },
   {
     "key": "catet",
@@ -221,6 +225,7 @@
     "key": "nsiret",
     "x-originalName": "nsiret",
     "type": "string",
+    "x-transform": { "type": "string" },
     "x-capabilities": {
       "textAgg": false
     },
@@ -244,6 +249,7 @@
     "key": "mft",
     "x-originalName": "mft",
     "type": "string",
+    "x-transform": { "type": "string" },
     "x-capabilities": {
       "textAgg": false
     },

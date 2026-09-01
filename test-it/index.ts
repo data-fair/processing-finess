@@ -23,14 +23,18 @@ const geolocalisation = (numET: string, x: string, y: string, src = 'IGN', dmaj 
 
 /**
  * Échantillon représentatif : zéros de tête, guillemets d'usage, département
- * d'outre-mer (projection dédiée), téléphone court et établissement sans géoloc.
+ * d'outre-mer (projection dédiée), identifiant corse alphanumérique, téléphone
+ * court et établissement sans géoloc.
  */
 const sourceFile = [
   'finess;etalab;98;2026-05-12',
   structureet({ NumET: '010009173', NumEJ: '010780054', Rs: '"LABM""BIOCEA"""', com: '451', dep: '01', tel: '474454647', telc: '474454114', mft: '03', catet: '611' }),
   structureet({ NumET: '970100012', NumEJ: '970100103', Rs: 'POLYCLINIQUE', crs: '"ANNEXE DU "" BOIS DU ROI"""', com: '302', dep: '9C', tel: '594000000', mft: '01' }),
   structureet({ NumET: '010011674', NumEJ: '010011666', Rs: 'PHARMACIE SANS GEOLOC', com: '288', dep: '01', mft: '09' }),
+  // La Corse porte des numéros FINESS alphanumériques : ils interdisent tout typage numérique.
+  structureet({ NumET: '2A0000030', NumEJ: '2A0000048', Rs: 'CH D\'AJACCIO', com: '004', dep: '2A', mft: '01' }),
   geolocalisation('010009173', '871234.5', '6543210.2', 'BAN,V2'),
+  geolocalisation('2A0000030', '1176526.6', '6108263.0'),
   geolocalisation('970100012', '300000', '500000'),
   geolocalisation('010011674', '', ''),
   geolocalisation('999999999', '100', '100')
@@ -83,12 +87,12 @@ describe('traitement FINESS', () => {
   it('extrait les deux sections du fichier source', async () => {
     const structureets = await fs.readFile(path.join(dir, 'structureet.csv'), 'utf8')
     const geolocalisations = await fs.readFile(path.join(dir, 'geolocalisation.csv'), 'utf8')
-    assert.equal(structureets.trim().split('\n').length, 4, 'en-tête + 3 établissements')
-    assert.equal(geolocalisations.trim().split('\n').length, 5, 'en-tête + 4 géolocalisations')
+    assert.equal(structureets.trim().split('\n').length, 5, 'en-tête + 4 établissements')
+    assert.equal(geolocalisations.trim().split('\n').length, 6, 'en-tête + 5 géolocalisations')
   })
 
   it('produit une ligne par établissement, sans les géolocalisations orphelines', () => {
-    assert.deepEqual(Object.keys(rows).sort(), ['010009173', '010011674', '970100012'])
+    assert.deepEqual(Object.keys(rows).sort(), ['010009173', '010011674', '2A0000030', '970100012'])
   })
 
   it('écrit exactement les colonnes du schéma', () => {
@@ -103,6 +107,23 @@ describe('traitement FINESS', () => {
     assert.equal(rows['010011674'].mft, '09')
     for (const key of ['NumET', 'NumEJ', 'mft', 'dep', 'codeCom', 'tel', 'telc', 'nsiret', 'uai']) {
       assert.equal(schema.find((field) => field.key === key)?.type, 'string', `${key} doit être typé string`)
+    }
+  })
+
+  it('conserve les identifiants alphanumériques corses', () => {
+    assert.equal(rows['2A0000030'].NumET, '2A0000030')
+    assert.equal(rows['2A0000030'].NumEJ, '2A0000048')
+    assert.equal(rows['2A0000030'].dep, '2A')
+    assert.equal(rows['2A0000030'].codeCom, '2A004')
+  })
+
+  it('force le type des colonnes de codes avec x-transform', () => {
+    // `type` seul ne suffit pas : Data-Fair redétecte le type sur un échantillon du
+    // fichier et écrase le schéma envoyé. Seul `x-transform.type` est réappliqué après
+    // la détection (voir cleanSchema côté Data-Fair).
+    for (const key of ['NumET', 'NumEJ', 'mft', 'telc', 'codeCom', 'tel', 'nsiret']) {
+      const field = schema.find((f) => f.key === key) as { 'x-transform'?: { type: string } } | undefined
+      assert.deepEqual(field?.['x-transform'], { type: 'string' }, `${key} doit forcer son type via x-transform`)
     }
   })
 
@@ -147,9 +168,9 @@ describe('traitement FINESS', () => {
   })
 
   it('récapitule les compteurs dans les logs', () => {
-    assert.ok(infos.includes('3 établissements et 4 géolocalisations extraits'), `extraction non résumée : ${infos.join(' | ')}`)
-    // 010011674 n'a pas de coordonnées : 2 établissements géolocalisés sur 3
-    assert.ok(infos.includes('3 établissements écrits, dont 2 géolocalisés (67 %)'), `fusion non résumée : ${infos.join(' | ')}`)
+    assert.ok(infos.includes('4 établissements et 5 géolocalisations extraits'), `extraction non résumée : ${infos.join(' | ')}`)
+    // 010011674 n'a pas de coordonnées : 3 établissements géolocalisés sur 4
+    assert.ok(infos.includes('4 établissements écrits, dont 3 géolocalisés (75 %)'), `fusion non résumée : ${infos.join(' | ')}`)
   })
 })
 

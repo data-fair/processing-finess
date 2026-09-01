@@ -10,7 +10,7 @@ Plugin data-fair-processings : télécharge, extrait et géolocalise la base FIN
    - Reprojection des coordonnées Lambert / UTM vers WGS84 (`lat` / `lon`).
    - Normalisation des codes départements et communes (DOM-TOM inclus).
    - Formatage des numéros de téléphone.
-   - Typage en chaînes de caractères des identifiants et codes à zéro de tête (`NumET`, `NumEJ`, `mft`) : typés `integer`, ils perdaient leur zéro initial (`010000024` → `10000024`).
+   - Typage en chaînes de caractères des identifiants et codes (`NumET`, `NumEJ`, `mft`, `telc`, `codeCom`, `tel`, `nsiret`), forcé via `x-transform` dans le schéma : Data Fair redétecte le type sur un échantillon du fichier et écrase le `type` envoyé. Sans ce forçage, ces colonnes passent en `integer`, perdent leur zéro initial (`010000024` → `10000024`) et rejettent les numéros FINESS corses (`2A0000030`).
    - Conservation des guillemets d'usage présents dans les libellés (`LABM "BIOCEA"`).
 4. **Publication** : création ou mise à jour du jeu de données Data Fair avec schéma typé.
 
